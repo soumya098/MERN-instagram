@@ -43,10 +43,10 @@ function App() {
         <div className="app__postsLeft">{postcomp}</div>
         <div className="app__postsRight">
           <InstagramEmbed
-            url="https://www.instagram.com/p/CKOYxWYBULc/"
+            url="https://www.instagram.com/p/BVHqd-pD3B4/"
             clientAccessToken={`${oEmbed.app_Id}|${oEmbed.clientToken}`}
-            maxWidth={320}
-            hideCaption={true}
+            maxWidth={350}
+            hideCaption={false}
             containerTagName="div"
             protocol=""
             injectScript
