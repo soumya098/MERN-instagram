@@ -16,7 +16,6 @@ function PostComp({ imageUrl, username, caption, postId }) {
         .collection("comments")
         .orderBy("timestamp", "desc")
         .onSnapshot((snapshot) => {
-          console.log(snapshot.docs[0]?.data());
           setComments(
             snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
           );

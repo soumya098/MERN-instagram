@@ -8,6 +8,7 @@ function FooterComp() {
   const [progress, setProgress] = useState(0);
   const [image, setImage] = useState(null);
   const [enable, setEnable] = useState(true);
+  const imageInputRef = React.useRef(); //to make input<file> element controlled
 
   const handleChange = (e) => {
     if (e.target.files[0]) {
@@ -50,7 +51,9 @@ function FooterComp() {
             });
             setProgress(0);
             setCaption("");
-            setImage(null);
+            imageInputRef.current.value = ""; //Resets the file name of the file input
+            setImage(null); //Resets the value of the file input
+            setEnable(true);
           });
       }
     );
@@ -66,7 +69,13 @@ function FooterComp() {
         value={caption}
         onChange={(e) => setCaption(e.target.value)}
       />
-      <input className="app__footerfile" type="file" onChange={handleChange} />
+      <input
+        className="app__footerfile"
+        type="file"
+        onChange={handleChange}
+        accept="image/*"
+        ref={imageInputRef} //Apply the ref to the input, now it's controlled
+      />
       <button
         id="upload"
         className={enable ? "imageupload__btn" : "imageupload__btnenabled"}
