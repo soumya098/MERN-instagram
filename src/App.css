@@ -1,38 +1,113 @@
-.App {
-  text-align: center;
+.app {
+  background-color: #fafafa;
+  height: 100vh;
+}
+.app__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  object-fit: contain;
+  background-color: #fff;
+  padding: 10px;
+  border-bottom: 1px solid lightgray;
+}
+.header__logo {
+  object-fit: contain;
+}
+.app__posts {
+  display: flex;
+  justify-content: center;
+  background-color: #fafafa;
+  padding: 20px;
+}
+.app__postsLeft {
+  margin-right: 20px;
+}
+.app__postsRight {
+  margin-left: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.post {
+  margin-bottom: 35px;
+  background-color: white;
+  max-width: 564px;
+  border: 1px solid lightgray;
+}
+.post__header {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  font-size: 80%;
+}
+.post__avatar {
+  margin-right: 5px;
+}
+.post__image {
+  width: 100%;
+  object-fit: contain;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+.post__caption {
+  font-size: 80%;
+  font-weight: normal;
+  padding: 10px 15px;
+  padding-bottom: 10px;
+}
+.post__comments {
+  padding: 20px;
+  font-size: 85%;
+}
+.post__commentbox {
+  display: flex;
+  margin: 10px 0px;
+}
+.post__input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  border-top: 1px solid lightgray;
+}
+.post__commentbtn {
+  flex: 0;
+  font-size: medium;
+  padding: 5px 15px;
+  border: none;
+  color: lightgray;
+  background-color: transparent;
+  border-top: 1px solid lightgray;
+}
+.post__commentbtnenabled {
+  flex: 0;
+  font-size: medium;
+  padding: 5px 15px;
+  border: none;
+  color: #0693f2;
+  background-color: transparent;
+  border-top: 1px solid lightgray;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.app__signup {
+  display: flex;
+  line-height: 200%;
+  flex-direction: column;
+}
+.app__signup input {
+  margin-top: 20px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.app__footer {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  width: 60%;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  background-color: white;
+  position: sticky;
+  object-fit: contain;
 }

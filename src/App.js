@@ -1,23 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import HeaderComp from "./components/HeaderComp";
+import PostComp from "./components/PostComp";
+import { db, auth } from "./firebase";
+import FooterComp from "./components/FooterComp";
+import InstagramEmbed from "react-instagram-embed";
 
 function App() {
+  const [posts, setPosts] = useState([]);
+
+  //run a code based on specific condition useEffect(code,condition);
+  useEffect(() => {
+    //this code run every time Posts collection is changes
+    db.collection("posts")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setPosts(
+          snapshot.docs.map((doc) => ({ id: doc.id, pData: doc.data() }))
+        );
+      });
+  }, [posts]);
+
+  const postcomp = posts.map((post) => (
+    <PostComp
+      key={post.id}
+      postId={post.id}
+      username={post.pData.username}
+      imageUrl={post.pData.imageUrl}
+      caption={post.pData.caption}
+    />
+  ));
+
+  const oEmbed = {
+    app_Id: "828189387760159",
+    clientToken: "d0c2968af39961c91c3c398f85960bcd",
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <HeaderComp />
+      <div className="app__posts">
+        <div className="app__postsLeft">{postcomp}</div>
+        <div className="app__postsRight">
+          <InstagramEmbed
+            url="https://www.instagram.com/p/CKOYxWYBULc/"
+            clientAccessToken={`${oEmbed.app_Id}|${oEmbed.clientToken}`}
+            maxWidth={320}
+            hideCaption={true}
+            containerTagName="div"
+            protocol=""
+            injectScript
+            onLoading={() => {}}
+            onSuccess={() => {}}
+            onAfterRender={() => {}}
+            onFailure={() => {}}
+          />
+        </div>
+      </div>
+      {auth.currentUser ? (
+        <FooterComp />
+      ) : (
+        <div className="app__footer">
+          <h3>you need to Signin to upload </h3>
+        </div>
+      )}
     </div>
   );
 }

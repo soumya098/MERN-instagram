@@ -1,0 +1,60 @@
+.imageupload__progress {
+  width: 70%;
+  align-self: center;
+  padding: 10px;
+}
+.app__footercaption {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 75%;
+  align-self: center;
+  padding: 10px 5px;
+  border: none;
+  border-bottom: 1px solid lightgray;
+}
+.app__footercaption:focus {
+  border-bottom: 1px solid black;
+}
+.app__footerfile {
+  align-self: center;
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.imageupload__btn {
+  display: inline-block;
+  background-color: lightgray;
+  border-radius: 10px;
+  border: 4px double lightgray;
+  color: #eeeeee;
+  text-align: center;
+  align-self: center;
+  font-size: medium;
+  padding: 5px 0px;
+  width: 100px;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.imageupload__btnenabled {
+  display: inline-block;
+  background-color: #0693f2;
+  border-radius: 10px;
+  border: 4px double lightgray;
+  color: #eeeeee;
+  text-align: center;
+  align-self: center;
+  font-size: medium;
+  width: 100px;
+  padding: 5px 0px;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
