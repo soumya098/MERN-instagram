@@ -2,32 +2,45 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import HeaderComp from "./components/HeaderComp";
 import PostComp from "./components/PostComp";
-import { db, auth } from "./firebase";
 import FooterComp from "./components/FooterComp";
 import InstagramEmbed from "react-instagram-embed";
+import axios from "./components/axios";
+import Pusher from "pusher-js";
 
 function App() {
   const [posts, setPosts] = useState([]);
 
-  //run a code based on specific condition useEffect(code,condition);
+  const fetchPosts = async () =>
+    await axios.get("/sync").then((responce) => {
+      setPosts(responce.data);
+    });
+
   useEffect(() => {
-    //this code run every time Posts collection is changes
-    db.collection("posts")
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
-        setPosts(
-          snapshot.docs.map((doc) => ({ id: doc.id, pData: doc.data() }))
-        );
-      });
-  }, [posts]);
+    fetchPosts();
+    return () => {
+      fetchPosts();
+    };
+  }, []);
+
+  useEffect(() => {
+    const pusher = new Pusher("8fed390a4b1f3ac6b4b5", {
+      cluster: "ap2",
+    });
+    const channel = pusher.subscribe("posts");
+    channel.bind("inserted", function (data) {
+      console.log(data);
+      fetchPosts(); //refetch to render in frontend
+    });
+  }, []);
 
   const postcomp = posts.map((post) => (
     <PostComp
-      key={post.id}
-      postId={post.id}
-      username={post.pData.username}
-      imageUrl={post.pData.imageUrl}
-      caption={post.pData.caption}
+      key={post._id}
+      postId={post._id}
+      username={post.user}
+      imageUrl={post.image}
+      caption={post.caption}
+      coms={post.comments}
     />
   ));
 
@@ -45,7 +58,7 @@ function App() {
           <InstagramEmbed
             url="https://www.instagram.com/p/BVHqd-pD3B4/"
             clientAccessToken={`${oEmbed.app_Id}|${oEmbed.clientToken}`}
-            maxWidth={350}
+            maxWidth={320}
             hideCaption={false}
             containerTagName="div"
             protocol=""
@@ -57,13 +70,7 @@ function App() {
           />
         </div>
       </div>
-      {auth.currentUser ? (
-        <FooterComp />
-      ) : (
-        <div className="app__footer">
-          <h3>you need to Signin to upload </h3>
-        </div>
-      )}
+      <FooterComp />
     </div>
   );
 }

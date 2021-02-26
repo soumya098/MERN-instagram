@@ -41,11 +41,9 @@ function HeaderComp() {
       if (authUser) {
         //user has logged in
         setUser(authUser);
-        console.log(`logged in as ${user?.displayName}`);
       } else {
         //user has looged out
         setUser(null);
-        console.log("user logged out");
       }
     });
     return () => {

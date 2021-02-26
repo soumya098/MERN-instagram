@@ -1,44 +1,49 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
-import { db, auth } from "../firebase";
-import firebase from "firebase";
+import { auth } from "../firebase";
+import axios from "./axios";
+import Pusher from "pusher-js";
 
-function PostComp({ imageUrl, username, caption, postId }) {
-  const [comments, setComments] = useState([]);
+function PostComp({ imageUrl, username, caption, postId, coms }) {
+  const [comments, setComments] = useState(coms);
   const [comment, setComment] = useState("");
-
+  const [user, setUser] = useState(null);
   useEffect(() => {
-    let unsubscibe;
-    if (postId) {
-      unsubscibe = db
-        .collection("posts")
-        .doc(postId)
-        .collection("comments")
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) => {
-          setComments(
-            snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
-          );
-        });
-    }
-
+    const unsubscibe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        setUser(authUser);
+      } else {
+        setUser(null);
+      }
+    });
     return () => {
       unsubscibe();
     };
-  }, [postId]);
+  }, [user]);
 
-  const renderComments = comments.map((comment) => (
-    <p key={comment.id}>
-      <strong>{comment.data.username}</strong> {comment.data.text}
+  useEffect(() => {
+    const pusher = new Pusher("8fed390a4b1f3ac6b4b5", {
+      cluster: "ap2",
+    });
+    const channel = pusher.subscribe("posts");
+    channel.bind("updated", function (data) {
+      if (postId === data.id) {
+        setComments(data.data);
+      }
+    });
+  }, []);
+
+  const renderComments = comments?.map((comment, index) => (
+    <p key={index}>
+      <strong>{comment.user}</strong> {comment.text}
     </p>
   ));
 
   const postComment = (event) => {
     event.preventDefault();
-    db.collection("posts").doc(postId).collection("comments").add({
-      text: comment,
-      username: auth.currentUser.displayName,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    axios.put(`/:id`, {
+      id: postId,
+      comment: { user: user?.displayName, text: comment },
     });
     setComment("");
   };
@@ -54,7 +59,7 @@ function PostComp({ imageUrl, username, caption, postId }) {
         <strong>{username}</strong> {caption}
       </h4>
       <div className="post__comments">{renderComments}</div>
-      {auth.currentUser && (
+      {user && (
         <form className="post__commentbox">
           <input
             type="text"
